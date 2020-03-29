@@ -5,24 +5,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { MatchComponent } from './match/match.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { BoardComponent } from './board/board.component';
-import { CardComponent } from './card/card.component';
+import { HomeComponent } from './home/home.component';
+import { GameModule } from './game/game.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    MatchComponent,
-    BoardComponent,
-    CardComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    GameModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

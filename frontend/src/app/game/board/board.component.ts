@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  constructor() { }
+    tamanho: number;
+    cartas: string[];
+
+  constructor() {
+    this.cartas = [];
+        for (let i = 0; i < 16; i++) {
+            this.cartas.push("carta " + i);   
+        }
+      console.log(this.cartas);
+   }
 
   ngOnInit(): void {
+      
   }
 
 }
