@@ -1,0 +1,12 @@
+.game__board {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+
+  .slot {
+    flex-basis: 25%;
+    display: flex;
+    height: 80px;
+  }
+}

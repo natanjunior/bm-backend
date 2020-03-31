@@ -1,1 +1,9 @@
-<p>card works!</p>
+<div class="card" [ngClass]="{'card--is-flipped': carta.estado == 1, 'card--removed': carta.estado == 2}">
+    <div class="card__face card__face--front">
+        
+    </div>
+    
+    <div class="card__face card__face--back">
+        <span>{{carta.valor}}</span>
+    </div>
+</div>

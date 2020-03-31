@@ -1,0 +1,45 @@
+:host {
+  perspective: 1000px;
+}
+
+.card {
+  flex-basis: 100%;
+  position: relative;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  transition: transform 0.7s;
+  transform-style: preserve-3d;
+
+  &.card--is-flipped {
+    transform: rotateY(180deg);
+  }
+
+  &.card--removed {
+    visibility: hidden;
+  }
+}
+
+.card__face {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+
+  &.card__face--front {
+    background: #db11cb;
+  }
+
+  &.card__face--back {
+    background: #1199db;
+    transform: rotateY(180deg);
+  }
+
+  span {
+    font-size: 40px;
+    font-family: fantasy;
+  }
+}
