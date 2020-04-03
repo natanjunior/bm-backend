@@ -10,54 +10,34 @@ export class MatchComponent implements OnInit {
 
     tamanhoRodada: number = 2;
 
-    partida;
+    partida = undefined;
     rodada;
 
-    constructor(private matchService: MatchService) {
+    constructor(private matchService: MatchService) { }
 
-        this.partida = matchService.getPartida(1);
-
-        console.log(this.partida);
-
+    ngOnInit(): void { 
         this.rodada = [];
+        this.matchService.getReturnStartGame().subscribe(_partida => {
+            this.partida = _partida;
+            console.log("partida", this.partida);
+        });
+        this.matchService.getReturnSelectCard().subscribe(_response => {
+            console.log("_response", _response);
+        });
+        this.matchService.getReturnVerifyRound().subscribe(_response => {
+            console.log("_response", _response);
+        });
     }
-
-    ngOnInit(): void { }
 
     selectCard(carta) {
-        
         if (carta.estado != 0)
             return;
-
-        if (this.rodada.length < this.tamanhoRodada) {
-            this.addCarta(carta);
-            this.alteraEstadoCarta(carta, 1);
-        }
-
-        if (this.rodada.length == this.tamanhoRodada)
-            setTimeout(() => { this.verificaRodada() }, 1000);
+        console.log(carta);
+        this.matchService.selectCard(carta);
     }
 
-    private addCarta(carta) {
-        if (this.rodada == undefined)
-            this.rodada = [];
-
-        this.rodada.push(carta);
-    }
-
-    private alteraEstadoCarta(carta, estado) {
-        carta.estado = estado;
-    }
-
-    private verificaRodada() {
-        var acertou = this.rodada.every(carta => carta.valor === this.rodada[0].valor);
-
-        if (acertou)
-            this.rodada.forEach(carta => this.alteraEstadoCarta(carta, 2));
-        else
-            this.rodada.forEach(carta => this.alteraEstadoCarta(carta, 0));
-
-        this.rodada = [];
+    startGame(){
+        this.matchService.startGame("br_teste");
     }
 
 }

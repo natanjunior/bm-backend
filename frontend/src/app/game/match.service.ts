@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
+import { Subject } from 'rxjs';
 
 enum SituacaoCarta {
     DOWN,
@@ -11,60 +13,36 @@ enum SituacaoCarta {
 })
 export class MatchService {
 
-    constructor() { }
+    private emissor$ = new Subject();
 
-    getPartida(idPartida) {
-        return {
-            "id": 1,
-            "codigo_baralho": "br_teste",
-            "cartas": [
-                {
-                    "codigo": "cr_t_1",
-                    "lado_a": "1",
-                    "lado_b": "um"
-                },
-                {
-                    "codigo": "cr_t_2",
-                    "lado_a": "2",
-                    "lado_b": "dois"
-                },
-                {
-                    "codigo": "cr_t_3",
-                    "lado_a": "3",
-                    "lado_b": "tres"
-                },
-                {
-                    "codigo": "cr_t_4",
-                    "lado_a": "4",
-                    "lado_b": "quatro"
-                },
-                {
-                    "codigo": "cr_t_5",
-                    "lado_a": "5",
-                    "lado_b": "cinco"
-                },
-                {
-                    "codigo": "cr_t_6",
-                    "lado_a": "6",
-                    "lado_b": "seis"
-                }
-            ],
-            "matriz": this.initMatriz(12)
-        };
-
-
+    emitirValor(valor){
+        this.emissor$.next(valor);
     }
 
-    initMatriz(tamanho: Number) {
-        let matriz = [];
-        for (let index = 0; index < tamanho; index++) {
-            matriz.push({
-                id: index,
-                estado: 0,
-                valor: Math.floor((index+2)/2)
-            });
-        }
-        return matriz;
+    getValor(){
+        this.emissor$.asObservable();
+    }
+
+    constructor(private socket: Socket) {}
+
+    startGame(idBaralho){
+        this.socket.emit('startGame', idBaralho);
+    }
+
+    getReturnStartGame() {
+        return this.socket.fromEvent("startGame");
+    }
+
+    selectCard(card){
+        this.socket.emit('selectCard', card);
+    }
+
+    getReturnSelectCard() {
+        return this.socket.fromEvent("selectCard");
+    }
+
+    getReturnVerifyRound() {
+        return this.socket.fromEvent("verifyRound");
     }
 
 }

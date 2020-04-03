@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { HomeComponent } from './home/home.component';
 import { GameModule } from './game/game.module';
+
+const config: SocketIoConfig = { url: 'http://localhost:3333', options: {
+    
+} };
 
 @NgModule({
   declarations: [
@@ -21,7 +26,8 @@ import { GameModule } from './game/game.module';
     BrowserModule,
     AppRoutingModule,
     GameModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]
