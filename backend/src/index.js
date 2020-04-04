@@ -29,10 +29,10 @@ sockets.on('connection', (socket) => {
         socket.emit('startGame', teste);
     });
 
-    socket.on('selectCard', card => {
-        const carta = GameController.selectCard(playerId, card);
+    socket.on('selectCard', slotKey => {
+        const carta = GameController.selectCard(playerId, slotKey);
         socket.emit('selectCard', carta);
-        console.log("carta", card);
+        console.log("carta", slotKey);
 
         const estadoJogo = GameController.verifyRound(playerId);
         if(estadoJogo != undefined)

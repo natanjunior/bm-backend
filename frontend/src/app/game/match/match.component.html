@@ -1,5 +1,5 @@
 <button (click)="startGame()">Começar jogo</button>
 <section class="game__board" *ngIf="partida != undefined">
-  <game-card *ngFor="let carta of partida.matriz" (click)="selectCard(carta)" [carta]="carta" class="slot">
+  <game-card *ngFor="let carta of partida.matriz | keyvalue" (click)="selectCard(carta)" [carta]="carta.value" class="slot">
   </game-card>
 </section>

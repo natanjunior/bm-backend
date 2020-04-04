@@ -16,6 +16,7 @@ export class CardComponent implements OnInit {
     }
 
     ngAfterContentChecked() {
+
         if (this.carta.estado == 0)
             this.alteraClasse('game__card--down');
         else if (this.carta.estado == 1)

@@ -1,17 +1,19 @@
 const connection = require('../database/connection');
 
 tamanhoRodada = 2;
+partida = undefined;
 rodada = undefined;
 
 function initMatriz(tamanho) {
-    let matriz = [];
+    let matriz = new Map();
+
     for (let index = 0; index < tamanho; index++) {
-        matriz.push({
-            id: index,
+        matriz.set(index, {
             estado: 0,
             valor: Math.floor((index + 2) / 2)
         });
     }
+
     return matriz;
 }
 
@@ -28,16 +30,16 @@ function alteraEstadoCarta(carta, estado) {
 }
 
 function verificaRodada() {
-    var acertou = rodada.every(carta => carta.valor === rodada[0].valor);
-
-    cartasAlteradas = rodada;
+    let acertou = rodada.every(slot => slot.carta.valor === rodada[0].carta.valor);
+    //let cartasAlteradas = Object.assign({}, rodada);
+    let cartasAlteradas = [...rodada];
 
     if (acertou)
-        cartasAlteradas.forEach(carta => carta = alteraEstadoCarta(carta, 2));
+        cartasAlteradas.forEach(slot => slot.carta = alteraEstadoCarta(slot.carta, 2));
     else
-        cartasAlteradas.forEach(carta => carta = alteraEstadoCarta(carta, 0));
+        cartasAlteradas.forEach(slot => slot.carta = alteraEstadoCarta(slot.carta, 0));
 
-    rodada = [];
+    rodada = []; console.log(">>> verificaRodada ", cartasAlteradas);
     return cartasAlteradas;
 }
 
@@ -46,8 +48,9 @@ module.exports = {
     startGame() {
 
         rodada = [];
+        let matriz  = initMatriz(12);
 
-        return {
+        partida = {
             "id": 1,
             "codigo_baralho": "br_teste",
             "cartas": [{
@@ -81,26 +84,33 @@ module.exports = {
                     "lado_b": "seis"
                 }
             ],
-            "matriz": initMatriz(12)
+            "matriz": matriz
         };
+        let partidaResponse = Object.assign({}, partida);
+        partidaResponse.matriz = JSON.stringify([...matriz]);
+        return partidaResponse;
     },
 
-    selectCard(playerId, card) {
+    selectCard(playerId, slotKey) {
 
-        carta = card;
+        let slot = {
+            chave: slotKey
+        };
 
-        if (card.estado != 0)
-            return carta; // TODO retornar algum estado para indicar que não deve fazer nada
+        slot.carta = partida.matriz.get(slotKey);
+        
+        if(slot.carta == undefined || slot.carta.estado != 0)
+            return slot; // TODO retornar algum estado para indicar que não deve fazer nada
 
         if (rodada.length < tamanhoRodada) {
-            addCarta(carta);
-            carta = alteraEstadoCarta(carta, 1);
+            addCarta(slot);
+            slot.carta = alteraEstadoCarta(slot.carta, 1);
         }
-
-        return carta;
+        console.log(">>> selectCard ", slot);
+        return slot;
     },
 
-    verifyRound(playerId){
+    verifyRound(playerId) {
         if (rodada.length == tamanhoRodada)
             return verificaRodada();
     }
